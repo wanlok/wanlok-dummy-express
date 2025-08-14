@@ -1,6 +1,7 @@
 import express from "express";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import { ChartConfiguration } from "chart.js";
+import { pdf } from "./PDF";
 
 const app = express();
 const port = 3000;
@@ -23,24 +24,26 @@ app.post("/generate-chart", async (req, res) => {
         {
           label: "Votes",
           data: values,
-          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-        },
-      ],
+          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+        }
+      ]
     },
     options: {
       plugins: {
         title: {
           display: true,
-          text: "Simple Bar Chart",
-        },
-      },
-    },
+          text: "Simple Bar Chart"
+        }
+      }
+    }
   };
 
   const image = await canvasRenderer.renderToBuffer(chartConfig);
   res.set("Content-Type", "image/png");
   res.send(image);
 });
+
+app.get("/pdf", pdf);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
