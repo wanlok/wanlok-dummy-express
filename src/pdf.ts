@@ -13,7 +13,7 @@ export const pdf = async (req: Request, res: Response) => {
     try {
       const browser = await puppeteer.launch({});
       const page = await browser.newPage();
-      await page.goto(url, { waitUntil: "networkidle2" });
+      await page.goto(url, { waitUntil: "networkidle0" });
       const pdf = await page.pdf(options);
       await browser.close();
       res.set("Content-Type", "application/pdf");
