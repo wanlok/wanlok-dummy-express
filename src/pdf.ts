@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import puppeteer, { Browser, PDFOptions } from "puppeteer";
+import puppeteer, { Browser, LaunchOptions, PDFOptions } from "puppeteer";
 
-const browserOptions = {
+const browserOptions: LaunchOptions = {
   executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   headless: true
 };
@@ -16,7 +16,7 @@ const getPage = async (browser: Browser, url: string) => {
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: "domcontentloaded" });
   await page.waitForFunction(() => {
-    const element: HTMLElement | null = document.querySelector("#root");
+    const element: HTMLElement | null = document.getElementById("root");
     return element && element.innerText.trim().length > 0;
   });
   return page;
