@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import puppeteer, { Browser, LaunchOptions, PDFOptions } from "puppeteer";
+import puppeteer, { Browser, LaunchOptions, Page, PDFOptions } from "puppeteer";
 
 const browserOptions: LaunchOptions = {
   executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -24,17 +24,19 @@ const getPage = async (browser: Browser, url: string) => {
 
 export const pdf = async (req: Request, res: Response) => {
   const url = req.query.url as string;
-  console.log(url);
+  const id = req.query.id as string;
+  let page: Page | undefined = undefined;
+  const browser = await puppeteer.launch(browserOptions);
   if (url) {
-    try {
-      const browser = await puppeteer.launch(browserOptions);
-      const page = await getPage(browser, url);
-      const pdf = await page.pdf(pdfOptions);
-      await browser.close();
-      res.set("Content-Type", "application/pdf");
-      res.send(pdf);
-    } catch (e) {
-      console.log(e);
-    }
+    page = await getPage(browser, url);
+  }
+  if (id) {
+    page = await getPage(browser, `https://wanlok2025.github.io/?id=${id}`);
+  }
+  if (page) {
+    const pdf = await page.pdf(pdfOptions);
+    await browser.close();
+    res.set("Content-Type", "application/pdf");
+    res.send(pdf);
   }
 };
