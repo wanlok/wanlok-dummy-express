@@ -19,7 +19,6 @@ const getPage = async (browser: Browser, url: string) => {
     const element: HTMLElement | null = document.getElementById("root");
     return element && element.innerText.trim().length > 0;
   });
-  await page.emulateMediaType("print");
   return page;
 };
 

@@ -1,3 +1,6 @@
-export const port = 3000;
-export const filePath = "/f";
-export const fileUploadDirectory = "/Volumes/A/Files/Projects/media-temp";
+import dotenv from "dotenv";
+dotenv.config();
+
+export const port = process.env.PORT || 3000;
+export const filePath = process.env.FILE_PATH || "/f";
+export const fileUploadDirectory = process.env.FILE_UPLOAD_DIRECTORY || "files";
