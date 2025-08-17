@@ -1,4 +1,7 @@
 .DS_Store
 .env
 
+server.crt
+server.key
+
 node_modules
