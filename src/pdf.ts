@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import puppeteer, { Browser, LaunchOptions, Page, PDFOptions } from "puppeteer";
+import { chromeExecutablePath } from "./config";
 
 const browserOptions: LaunchOptions = {
-  executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  executablePath: chromeExecutablePath,
   headless: true
 };
 
