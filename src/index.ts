@@ -16,10 +16,9 @@ app.use(
     allowedHeaders: ["Content-Type"]
   })
 );
-
 const options = {
-  key: fs.readFileSync("server.key"),
-  cert: fs.readFileSync("server.crt")
+  key: fs.readFileSync("C:/Certbot/live/wanlok.ddns.net/privkey.pem"),
+  cert: fs.readFileSync("C:/Certbot/live/wanlok.ddns.net/fullchain.pem")
 };
 
 app.use(express.json());
@@ -31,6 +30,6 @@ app.get("/pdf", pdf);
 app.post("/bar-chart-1", barChart1);
 app.post(`/upload`, uploadParams, upload);
 
-https.createServer(options, app).listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+https.createServer(options, app).listen(443, () => {
+  console.log("Node app running securely on port 443");
 });
