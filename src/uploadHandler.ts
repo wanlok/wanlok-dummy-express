@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import fs from "fs";
 import multer from "multer";
-import { filePath, fileUploadDirectory } from "./config";
+import { fileUploadDirectory } from "./config";
 
 interface FileInfo {
+  originalName?: string;
   name?: string;
   mime_type: string;
   reject_reason?: string;
-  path?: string;
 }
 
 interface UploadRequest extends Request {
@@ -30,7 +30,7 @@ const fileFilter = (req: UploadRequest, file: Express.Multer.File, cb: multer.Fi
     req.fileInfoList = [];
   }
   req.fileInfoList.push({
-    name: file.originalname,
+    originalName: file.originalname,
     mime_type: file.mimetype,
     reject_reason: accepted ? undefined : "MIME_TYPE_NOT_ALLOWED"
   });
@@ -46,13 +46,13 @@ export const uploadParams = (req: Request, res: Response, next: NextFunction) =>
 export const upload = async (req: Request, res: Response) => {
   const uploadRequest = req as UploadRequest;
   for (const file of (req.files as Express.Multer.File[]) || []) {
-    const fileInfo = uploadRequest.fileInfoList.find((fileInfo) => fileInfo.name === file.originalname);
+    const fileInfo = uploadRequest.fileInfoList.find((fileInfo) => fileInfo.originalName === file.originalname);
     if (fileInfo) {
-      fileInfo.path = `${filePath}/${encodeURIComponent(file.filename)}`;
+      fileInfo.name = `${encodeURIComponent(file.filename)}`;
     }
   }
   for (const fileInfo of uploadRequest.fileInfoList) {
-    if (!fileInfo.path && !fileInfo.reject_reason) {
+    if (!fileInfo.name && !fileInfo.reject_reason) {
       fileInfo.reject_reason = "FILE_SIZE_TOO_LARGE";
     }
   }
